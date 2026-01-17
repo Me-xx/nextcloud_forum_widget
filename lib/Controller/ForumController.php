@@ -39,9 +39,9 @@ class ForumController extends Controller {
 
             // Top Threads nach Views
             $qb2 = $this->db->getQueryBuilder();
-            $qb2->select('title', 'views')
+            $qb2->select('title', 'view_count')
                 ->from('forum_threads')
-                ->orderBy('views', 'DESC')
+                ->orderBy('view_count', 'DESC')
                 ->setMaxResults(3);
 
             $threads = $qb2->executeQuery()->fetchAll();  // ✅ fetchAll() statt fetchAllAssociative()
