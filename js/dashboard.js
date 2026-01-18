@@ -45,14 +45,16 @@
             console.log('✅ Forum data loaded:', data);
 
             // Kategorien rendern
-            renderList(catList, data.categories || [], (item) =>
-                `${item.name || 'Unbekannt'} (${item.thread_count || 0})`
-            );
+            renderList(catList, data.categories || [], (item) => {
+                const link = OC.generateUrl('/apps/forum/c/{slug}', { slug: item.slug });
+                return `<a href="${link}">${item.name || 'Unbekannt'} (${item.thread_count || 0})</a>`;
+            });
 
             // Threads rendern
-            renderList(threadList, data.threads || [], (item) =>
-                `${item.title || 'Unbekannt'} (${item.views || 0})`
-            );
+            renderList(threadList, data.threads || [], (item) => {
+                const link = OC.generateUrl('/apps/forum/t/{slug}', { slug: item.slug });
+                return `<a href="${link}">${item.title || 'Unbekannt'} (${item.views || 0})</a>`;
+            });
         })
         .catch(error => {
             console.error('❌ Forum Widget Error:', error);
@@ -73,7 +75,7 @@
 
             items.slice(0, 5).forEach(item => { // Max 5 Items
                 const li = document.createElement('li');
-                li.textContent = formatFn(item);
+                li.innerHTML = formatFn(item);
                 li.title = formatFn(item); // Tooltip
                 listEl.appendChild(li);
             });

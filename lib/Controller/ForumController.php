@@ -27,11 +27,12 @@ class ForumController extends Controller {
         try {
             // Top Kategorien nach Thread-Anzahl
             $qb = $this->db->getQueryBuilder();
-            $qb->select('c.name')
+
+            $qb->select('c.name','c.slug')
                 ->addSelect($qb->createFunction('COUNT(t.id) AS thread_count'))
                 ->from('forum_categories', 'c')
                 ->leftJoin('c', 'forum_threads', 't', 'c.id = t.category_id')
-                ->groupBy('c.id', 'c.name')
+                ->groupBy('c.id', 'c.name','c.slug')
                 ->orderBy('thread_count', 'DESC')
                 ->setMaxResults(3);
 
@@ -39,7 +40,7 @@ class ForumController extends Controller {
 
             // Top Threads nach Views
             $qb2 = $this->db->getQueryBuilder();
-            $qb2->select('title', 'view_count')
+            $qb2->select('title', 'view_count','slug')
                 ->from('forum_threads')
                 ->orderBy('view_count', 'DESC')
                 ->setMaxResults(3);
